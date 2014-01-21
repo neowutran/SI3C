@@ -16,3 +16,5 @@
 *.exe
 *.out
 *.app
+/SI3C/dist/
+/SI3C/build/
