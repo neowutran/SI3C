@@ -18,7 +18,7 @@
 int main(int argc, char* argv[]) {
 
     argc = 2;
-    argv[1] = "th";
+    argv[1] = "tha";
     if (argc != 2) {
         fprintf(stderr, "Usage: %s mot-a-corriger\n", *argv);
         exit(EXIT_FAILURE);

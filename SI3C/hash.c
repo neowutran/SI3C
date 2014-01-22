@@ -38,7 +38,7 @@ void hash_table_add(char *word) {
 
     const int length = strlen(word); // get the length of the text
     char* lower = (char*) malloc(length + 1); // allocate 'length' bytes + 1 (for null terminator) and cast to char*
-    lower[ length ] = 0; // set the last byte to a null terminator
+    lower[ length ] = '\0'; // set the last byte to a null terminator
 
     // copy all character bytes to the new buffer using tolower
     for (int i = 0; i < length; i++) {

@@ -18,9 +18,8 @@
 
 char** allocate_possibles(int n) {
     int max_possible = 54 * n + 25; //Nombres de possibilitées
-    int i;
     char** p = malloc(max_possible);
-    for (i = 0; i < max_possible; i++) {
+    for (int i = 0; i < max_possible; i++) {
         *p = malloc(n + 1);
     }
     return p;
@@ -33,20 +32,20 @@ char** allocate_possibles(int n) {
  */
 int deletions(char* word, char** posibles, int index) {
 
-    int j = 0, k = 0, i = 0;
+    int k = 0;
 
-    for (i = 0; i < strlen(word); i++) {
+    for (int i = 0; i < strlen(word); i++) {
         k = 0;
         int j;
         char * new_word = malloc(1000);
 
-        for (j = 0; j < i; j++) {
+        for (int j = 0; j < i; j++) {
             *(new_word + j) = word[k];
             k++;
         }
         k++;
 
-        for (j = j; j < (strlen(word) - 1); j++) {
+        for (; j < (strlen(word) - 1); j++) {
             *(new_word + j) = word[k];
             k++;
         }
@@ -71,10 +70,8 @@ int alterations(char* word, char** posibles, int index) {
             k++;
         }
         *(new_word + j - 1) = alphabet[i % 26];
-        *(new_word + j) = '|';
-        j++;
 
-        for (j = j; j < (strlen(word) + 1); j++) {
+        for (; j < (strlen(word) + 1); j++) {
             *(new_word + j) = word[k];
             k++;
         }
@@ -102,7 +99,7 @@ int inserts(char* word, char** posibles, int index) {
         *(new_word + j) = alphabet[i % 26];
         j++;
 
-        for (j = j; j < (strlen(word) + 1); j++) {
+        for (; j < (strlen(word) + 1); j++) {
             *(new_word + j) = word[k];
             k++;
         }
@@ -113,9 +110,11 @@ int inserts(char* word, char** posibles, int index) {
 }
 
 void destroy_possibles(char** possibles, int index) {
+    // free(possibles);
+    /*
     for (int i = 0; i < index; i++) {
         free(*(possibles + i));
-    }
+    }*/
 }
 
 int transpositions(char* word, char** posibles, int index) {
@@ -141,6 +140,7 @@ int transpositions(char* word, char** posibles, int index) {
 
 
     }
+    free(new_word);
 
     return index;
 }
@@ -174,13 +174,17 @@ static char *find_corrections(char *word) {
     /* construires une liste de mots possibles */
 
     index = deletions(word, possibles, index);
+
     index = transpositions(word, possibles, index);
+
     index = alterations(word, possibles, index);
+
     index = inserts(word, possibles, index);
 
     /*choisir le meilleur candidat entre word et les mots possibles */
 
     result = better_candidate(word, possibles, index);
+
     /* un peu de ménage avant de renvoyer le meilleur candidat */
 
     destroy_possibles(possibles, index);
@@ -191,12 +195,4 @@ static char *find_corrections(char *word) {
 char *correct_word(char *word) {
 
     return find_corrections(word);
-}
-
-void test(void) {
-    char alphabet[26] = ALPHABET;
-    int i;
-    for (i = 0; i < 26; i++) {
-        printf("%c\n", alphabet[i]);
-    }
 }
