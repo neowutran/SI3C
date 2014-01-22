@@ -32,24 +32,24 @@ char** allocate_possibles(int n) {
  */
 int deletions(char* word, char** posibles, int index) {
 
-    int k=0,j,i=0;
-        for (i=0;i<strlen(word);i++){
-                k=0;
-                int j;
-                char * new_word=malloc(10000);
-                for (j=0;j<i;j++){
-                        *(new_word+j)=word[k];
-                        k++;
-                }
-                k++;
-                for (j=j;j<(strlen(word)-1);j++){
-                        *(new_word+j)=word[k];                        
-                        k++;
-                }
-                *(posibles+index)=new_word;
-                index++;
+    int k = 0, j, i = 0;
+    for (i = 0; i < strlen(word); i++) {
+        k = 0;
+        int j;
+        char * new_word = malloc(10000);
+        for (j = 0; j < i; j++) {
+            *(new_word + j) = word[k];
+            k++;
         }
-        return index;
+        k++;
+        for (j = j; j < (strlen(word) - 1); j++) {
+            *(new_word + j) = word[k];
+            k++;
+        }
+        *(posibles + index) = new_word;
+        index++;
+    }
+    return index;
 }
 
 int alterations(char* word, char** posibles, int index) {
@@ -108,9 +108,9 @@ int inserts(char* word, char** posibles, int index) {
 
 void destroy_possibles(char** possibles, int index) {
 
-    for(int i=0;i<index;i++)
-	free(possibles[i]);
-   
+    for (int i = 0; i < index; i++)
+        free(possibles[i]);
+
 }
 
 int transpositions(char* word, char** posibles, int index) {
@@ -142,22 +142,25 @@ int transpositions(char* word, char** posibles, int index) {
 }
 
 char* better_candidate(char* word, char** possibles, int index) {
-    if(hash_table_is_present(word))
+    if (hash_table_is_present(word)) {
         return word;
+    }
     int max_occurence = 0;
     int occurence = 0;
     int index_corr_word = -1;
 
     for (int i = 0; i < index; i++) {
         occurence = hash_table_search(*(possibles + i));
+
         if (occurence > max_occurence) {
             index_corr_word = i;
             max_occurence = occurence;
         }
     }
     if (index_corr_word == -1) return word;
-    
-    return *(possibles + index_corr_word);
+    char * corr = malloc(sizeof (char) * 100);
+    return strcpy(corr, *(possibles + index_corr_word));
+
 }
 
 static char *find_corrections(char *word) {
@@ -179,13 +182,13 @@ static char *find_corrections(char *word) {
     index = alterations(word, possibles, index);
 
     index = inserts(word, possibles, index);
-    
+
     /*choisir le meilleur candidat entre word et les mots possibles */
 
     result = better_candidate(word, possibles, index);
 
     /* un peu de ménage avant de renvoyer le meilleur candidat */
-    index=strlen(word)+1;               //Mise d'index à cette valeur pour le free
+    index = strlen(word) + 1; //Mise d'index à cette valeur pour le free
     destroy_possibles(possibles, index);
 
     return result;
