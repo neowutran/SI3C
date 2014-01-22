@@ -13,10 +13,12 @@
 #include <stdlib.h>
 #include "hash.h"
 #include "corpus.h"
-//#include "correct.h"
+#include "correct.h"
 
 int main(int argc, char* argv[]) {
 
+    argc = 2;
+    argv[1] = "th";
     if (argc != 2) {
         fprintf(stderr, "Usage: %s mot-a-corriger\n", *argv);
         exit(EXIT_FAILURE);

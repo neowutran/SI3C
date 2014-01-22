@@ -31,14 +31,13 @@ int init_corpus_from_file(char *filename) {
 
             chaine[i] = ch;
             i++;
-
-        } else {
-
-            chaine[i] = '\0';
-            if (!i)continue;
-            i = 0;
-            hash_table_add(chaine);
+            continue;
         }
+
+        if (!i)continue;
+        chaine[i] = '\0';
+        i = 0;
+        hash_table_add(chaine);
 
     }
 
