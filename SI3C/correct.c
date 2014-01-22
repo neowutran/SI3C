@@ -15,7 +15,156 @@
 #include <malloc.h>
 #include "correct.h"
 #include "hash.h"
+
+
+
+
+
+char** allocate_possibles(int n){
+	int max_possible=54*n+25;   //Nombres de possibilitées
+	int i;
+	char** p=malloc(max_possible);
+	for(i=0;i<max_possible;i++){
+            *p=malloc(n+1);
+	}
+	return p;
+}
 /*
+ * 
+ *Renvois le nombre de mot different qu'il y a en supprimant une lettre.
+ *
+ */
+int deletions(char* word, char** posibles,int index){
+        
+        int j=0,k=0,i=0;
+        
+        for (i=0;i<strlen(word);i++){
+                k=0;
+                int j;
+                char * new_word=malloc(1000);
+
+                for (j=0;j<i;j++){
+                        *(new_word+j)=word[k];
+                        k++;
+                }
+                k++;
+
+                for (j=j;j<(strlen(word)-1);j++){
+                        *(new_word+j)=word[k];                        
+                        k++;
+                }
+                *(posibles+index)=new_word;
+                index++;
+        }
+        return index;
+}
+
+
+
+
+
+int alterations(char* word, char** posibles,int index){
+        
+        int j,k=0,i=0;
+
+        
+        char alphabet[26]=ALPHABET;
+        for (i=26;i<(strlen(word)+1)*26;i++){
+                k=0;
+                char * new_word=malloc(1000);
+
+                for (j=0;j<i/26;j++){
+                        *(new_word+j)=word[k];
+                        k++;
+                }
+                *(new_word+j-1)=alphabet[i%26];
+                *(new_word+j)='|';
+                j++;
+
+                for (j=j;j<(strlen(word)+1);j++){
+                        *(new_word+j)=word[k];
+                        k++;
+                }
+                *(posibles+index)=new_word;
+                index++;
+        }
+        return index;
+}
+
+int inserts(char* word, char** posibles,int index){
+        
+        int j,k=0,i=0;
+
+
+        char alphabet[26]=ALPHABET;
+        for (i=0;i<(strlen(word)+1)*26;i++){
+
+                k=0;
+                char * new_word=malloc(1000);
+
+                for (j=0;j<i/26;j++){
+                        *(new_word+j)=word[k];
+                        k++;
+                }
+                *(new_word+j)=alphabet[i%26];
+                j++;
+                
+                for (j=j;j<(strlen(word)+1);j++){
+                        *(new_word+j)=word[k];
+                        k++;
+                }
+                *(posibles+index)=new_word;
+                index++;
+        }
+        return index;
+}
+
+void destroy_possibles(char** possibles, int index){
+	int i;
+	for(i=0;i<index;i++){
+		free(*possibles);
+	}
+	free(possibles);
+}
+
+int transpositions(char* word, char** posibles,int index){
+        
+        int j,i=0;
+        char * new_word=malloc(1000);
+        for (i=0;i<(strlen(word)-1);i++){
+                for (j=0;j<(strlen(word));j++){
+                        *(new_word+j)=word[j];
+                }
+
+                char new_last=word[i];
+                char new_first=word[i+1];
+                
+                new_word[i]=new_first;
+                new_word[i+1]=new_last;
+                printf("%s\n",new_word);
+
+                
+                *(posibles+index)=new_word;
+                index++;
+                
+                
+                }
+        
+        return index;
+}
+
+//TODO à faire ....
+char* better_candidate(char* word, char** possibles, int index){
+	/*  int i;
+          int search;
+	  for(i=0;i<index;i++){
+		 char* possible=*(possibles+i);
+		 search=hsearch(word,FIND);
+	  }
+	return search;*/
+    return word;
+}
+
 static char *find_corrections(char *word) {
     char **possibles = allocate_possibles(strlen(word));
     char *result;
@@ -25,20 +174,20 @@ static char *find_corrections(char *word) {
         fprintf(stderr, "cannot allocate the array of possibles");
         exit(EXIT_FAILURE);
     }
- */
+ 
 /* construires une liste de mots possibles */
-/*
+
     index = deletions(word, possibles, index);
     index = transpositions(word, possibles, index);
     index = alterations(word, possibles, index);
     index = inserts(word, possibles, index);
- */
+
 /*choisir le meilleur candidat entre word et les mots possibles */
-/*
+
 result = better_candidate(word, possibles, index);
- */
+
 /* un peu de ménage avant de renvoyer le meilleur candidat */
-/*
+
 destroy_possibles(possibles, index);
     return result;
 }
@@ -46,4 +195,11 @@ destroy_possibles(possibles, index);
 char *correct_word(char *word) {
     return hash_table_is_present(word) ? word : find_corrections(word);
 }
- */
+
+void test(void){
+    char alphabet[26]=ALPHABET;
+    int i;
+    for(i=0;i<26;i++){
+        printf("%c\n",alphabet[i]);
+    }
+}
