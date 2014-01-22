@@ -110,11 +110,10 @@ int inserts(char* word, char** posibles, int index) {
 }
 
 void destroy_possibles(char** possibles, int index) {
-    // free(possibles);
-    /*
-    for (int i = 0; i < index; i++) {
-        free(*(possibles + i));
-    }*/
+
+    for(int i=0;i<index;i++)
+	free(possibles[i]);
+   
 }
 
 int transpositions(char* word, char** posibles, int index) {
@@ -158,6 +157,7 @@ char* better_candidate(char* word, char** possibles, int index) {
         }
     }
     if (index_corr_word == -1) return word;
+    
     return *(possibles + index_corr_word);
 }
 
@@ -180,13 +180,13 @@ static char *find_corrections(char *word) {
     index = alterations(word, possibles, index);
 
     index = inserts(word, possibles, index);
-
+    
     /*choisir le meilleur candidat entre word et les mots possibles */
 
     result = better_candidate(word, possibles, index);
 
     /* un peu de ménage avant de renvoyer le meilleur candidat */
-
+    index=strlen(word)+1;               //Mise d'index à cette valeur pour le free
     destroy_possibles(possibles, index);
 
     return result;
