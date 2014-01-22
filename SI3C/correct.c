@@ -32,27 +32,24 @@ char** allocate_possibles(int n) {
  */
 int deletions(char* word, char** posibles, int index) {
 
-    int k = 0;
-
-    for (int i = 0; i < strlen(word); i++) {
-        k = 0;
-        int j;
-        char * new_word = malloc(1000);
-
-        for (int j = 0; j < i; j++) {
-            *(new_word + j) = word[k];
-            k++;
+    int k=0,j,i=0;
+        for (i=0;i<strlen(word);i++){
+                k=0;
+                int j;
+                char * new_word=malloc(10000);
+                for (j=0;j<i;j++){
+                        *(new_word+j)=word[k];
+                        k++;
+                }
+                k++;
+                for (j=j;j<(strlen(word)-1);j++){
+                        *(new_word+j)=word[k];                        
+                        k++;
+                }
+                *(posibles+index)=new_word;
+                index++;
         }
-        k++;
-
-        for (; j < (strlen(word) - 1); j++) {
-            *(new_word + j) = word[k];
-            k++;
-        }
-        *(posibles + index) = new_word;
-        index++;
-    }
-    return index;
+        return index;
 }
 
 int alterations(char* word, char** posibles, int index) {
@@ -139,12 +136,14 @@ int transpositions(char* word, char** posibles, int index) {
 
 
     }
-    free(new_word);
+    //free(new_word);
 
     return index;
 }
 
 char* better_candidate(char* word, char** possibles, int index) {
+    if(hash_table_is_present(word))
+        return word;
     int max_occurence = 0;
     int occurence = 0;
     int index_corr_word = -1;
