@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "corpus.h"
 #include "hash.h"
 #include <ctype.h>
-#include <stdint.h>
+#include <string.h>
 
 int init_corpus_from_file(char *filename) {
     char ch;
